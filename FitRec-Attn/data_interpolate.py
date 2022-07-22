@@ -71,11 +71,11 @@ class dataInterpreter(object):
         
         if os.path.exists(self.processed_path):
             print("{} exists".format(self.processed_path))
-            self.original_data = np.load(self.processed_path)[0]
+            self.original_data = np.load(self.processed_path, allow_pickle=True)[0]
             self.map_workout_id()
         else:
             print("load original data")
-            exit(0)
+            # exit(0)
             pool = Pool(5) 
             with open(self.original_data_path, 'r') as f:
                 self.original_data =pool.map(process, f)
@@ -341,8 +341,8 @@ class dataInterpreter(object):
         if context_size == 1: # if the window is 1, no smoothing should be applied
             return seq
         seq_len = len(seq)
-        if context_size % 2 == f0:
-            raise(exception("Context size must be odd for median smoothing"))
+        if context_size % 2 == 0:
+            raise(Exception("Context size must be odd for median smoothing"))
 
         smoothed_seq = []
         # loop through sequence and smooth each time step
@@ -561,8 +561,9 @@ if __name__ == "__main__":
     zMultiple = 5
     includeUser = True
     includeTemporal = False
+    includeSport = False
 
-    endo_reader = dataInterpreter(10, inputAtts, includeUser, includeTemporal, targetAtts,
+    endo_reader = dataInterpreter(10, inputAtts, includeUser, includeSport, includeTemporal, targetAtts,
                                   fn=data_path, scaleVals=scale_toggle, trimmed_workout_len=trimmed_workout_len,
                                   scaleTargets=scaleTargets, trainValidTestSplit=trainValidTestSplit,
                                   zMultiple = zMultiple, trainValidTestFN=trainValidTestFN)

@@ -3,6 +3,8 @@
 from collections import defaultdict
 import time
 import datetime
+import numpy as np
+import pickle
 
 def convert2datetime(unix_timestamp):
     utc_time = time.gmtime(unix_timestamp)
@@ -11,7 +13,7 @@ def convert2datetime(unix_timestamp):
     return dt
 
 path = "data/processed_endomondoHR_proper_interpolate.npy"
-data = np.load(path)[0]
+data2 = np.load(path, allow_pickle=True)[0]
 
 # rebuild dataset
 

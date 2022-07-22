@@ -10,12 +10,9 @@ import matplotlib
 import datetime as dt, itertools, pandas as pd, matplotlib.pyplot as plt, numpy as np
 import datetime, time
 import os
-import util as util
+import logging
 
-global logger
-
-util.setup_log()
-logger = util.logger
+logger = logging.getLogger()
 
 use_cuda = torch.cuda.is_available()
 logger.info("Is CUDA available? %s.", use_cuda)
@@ -119,7 +116,7 @@ class encoder(nn.Module):
                            cell.repeat(self.input_size, 1, 1).permute(1, 0, 2),
                            input_data.permute(0, 2, 1)), dim = 2) # batch_size * input_size * (2*hidden_size + T)
             # Eqn. 9: Get attention weights
-            x = self.attn_linear(x.view(-1, self.hidden_size * 2 + self.T)) # (batch_size * input_size) * 1
+            x: torch.Tensor = self.attn_linear(x.view(-1, self.hidden_size * 2 + self.T)) # (batch_size * input_size) * 1
             attn_weights = F.softmax(x.view(-1, self.input_size), dim = -1) # batch_size * input_size, attn weights with values sum up to 1.
             # Eqn. 10: LSTM
             weighted_input = torch.mul(attn_weights, input_data[:, t, :]) # batch_size * input_size
@@ -140,7 +137,7 @@ class encoder(nn.Module):
             input_encoded[:, t, :] = hidden
         return input_weighted, input_encoded
 
-    def init_hidden(self, x):
+    def init_hidden(self, x: torch.Tensor):
         # No matter whether CUDA is used, the returned variable will have the same type as x.
         return Variable(x.data.new(1, x.size(0), self.hidden_size).zero_()) # dimension 0 is the batch dimension
 
