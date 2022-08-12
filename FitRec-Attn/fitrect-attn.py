@@ -4,13 +4,8 @@ from torch.autograd import Variable
 from torch import optim
 import torch.nn.functional as F
 
-from data_interpolate import dataInterpreter, metaDataEndomondo
+from data_interpolate import dataInterpreter
 
-import matplotlib
-import datetime as dt
-import itertools
-import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 import datetime
 import time
