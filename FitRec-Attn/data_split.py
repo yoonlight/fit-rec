@@ -13,7 +13,7 @@ def convert2datetime(unix_timestamp):
     return dt
 
 path = "data/processed_endomondoHR_proper_interpolate.npy"
-data2 = np.load(path, allow_pickle=True)[0]
+data2 = np.load(path, allow_pickle=True)
 
 # rebuild dataset
 
